@@ -19,5 +19,5 @@ flask_bcrypt
 flask-migrate
 stripe
 python-dotenv
-flask_user
+flask_user==1.0.2.2
 flask_admin

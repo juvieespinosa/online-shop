@@ -1,0 +1,186 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container px-4 px-lg-5">
+    <a class="navbar-brand" href="/">All Products</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Brands
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {% for brand in brands %}
+            <a class="dropdown-item" href="{{url_for('get_brand', id = brand.id)}}">{{brand.name}}</a>
+            {% endfor %}
+          </div>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Categories
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {% for category in categories %}
+            <a class="dropdown-item" href="{{url_for('get_category', id = category.id)}}">{{category.name}}</a>
+            {% endfor %}
+          </div>
+        </li>
+
+      </ul>
+
+    </div>
+    <form class="d-flex">
+        <button class="btn btn-outline-dark" type="submit">
+          <a class="nav-link" href="{{url_for('getCart')}}" tabindex="-1"> Cart ({{(session["Shoppingcart"])|length}}) </a>
+        </button>
+      </form>
+  </div>
+  </div>
+</nav>
+
+<!-- Header-->
+<header>
+  <div style="background-color:#FF87B2">
+    <div class="container px-4 px-lg-5 my-5">
+      <div class="text-center text-white">
+        <h1 class="display-5 fw-bolder"> CHECKOUT </h1>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+
+
+<div class="container px-4 px-lg-5">
+<!--   {% include "_messages.html" %}-->
+  <div class="row">
+      <div class="col-md-12"
+       Invoice: {{orders.invoice}}
+        <br>
+        Status: {{orders.status}}
+        <br>
+        Customer name: {{customer.name}}
+        <br>
+        Customer email: {{customer.email}}
+        <br>
+        Customer contact: {{customer.contact}}
+        <br>
+        <br>
+    <table class="table table-sm">
+      <thead>
+        <th>No.</th>
+        <th>Name</th>
+        <th>Price</th>
+
+      </thead>
+      <tbody>
+        {% for key, product in orders.orders.items() %}
+        <tr>
+          <td>{{loop.index}}</td>
+          <td>{{product.name}}</td>
+          <td>${{product.price}}</td>
+         </tr>
+        {% endfor %}
+
+        <tr>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td>
+            <h7> Subtotal ${{subtotal}} </h7>
+         </td>
+        </tr>
+        <tr>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td>
+            <h7> Shipping: ${{shipping}} </h7>
+         </td>
+        </tr>
+        <tr>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td>
+            <h7> Tax: ${{tax}} </h7>
+         </td>
+        </tr>
+        <tr>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+          <td>
+            <h5>Total Price: ${{grandtotal}}</h5>
+          </td>
+        </tr>
+        <tr>
+           <td>
+          </td>
+          <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+          <td>
+              {% if orders.status == "Paid" %}
+              {% else %}
+            <form action="{{url_for('payment')}}" method="POST">
+            {% set amount = grandtotal.replace('.','') %}
+            <input type="hidden" name="amount" value="{{amount}}">
+            <input type="hidden" name="invoice" value="{{orders.invoice}}">
+              <script
+                src="https://checkout.stripe.com/checkout.js"
+                class="stripe-button"
+                data-key="pk_test_51LeUdnGxsMLQLYe4MBcsPy6tEHhrA5IiSTBBQV5UM3ODt7myUICInuaV1UL5NPd3BGSk7mvGMwgGgtAq32N8ks5k00vHJYHFPI"
+                data-name="JHUV'S SHOPLINE"
+                data-description="Inspire With Your Style"
+                data-amount="{{amount}}"
+                data-currency="usd">
+              </script>
+            </form>
+            {% endif %}
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Footer-->
+<footer>
+  <div style="background-color:#FF87B2">
+     <div class="container px-4 px-lg-5 my-5">
+      <p class="m-0 text-center text-white">Copyright &copy; Jhuv's Shopline 2022</p>
+    </div>
+  </div>
+</footer>
+
+
+{% endblock content %}

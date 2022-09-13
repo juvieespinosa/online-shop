@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% include "navbar.html" %}
+
+{% block content %}
+
+
+<div class="container px-4 px-lg-5 my-5">
+  <div class="row gx-4 gx-lg-5 align-items-center">
+    <div class="col-md-6" id="b_image">
+      <img class="card-img-top mb-5 mb-md-0" src="{{url_for('static', filename='images/' + product.image_1)}}" alt="{{product.name}}" />
+    </div>
+
+    <div class="col-md-6">
+      <h1 class="display-5 fw-bolder">{{product.name }}</h1>
+      <div class="fs-5 mb-5">
+        <span class="display-6">${{product.price }}</span>
+        <hr>
+      </div>
+      <p class="lead">{{product.desc}}</p>
+
+      <form action="{{url_for('AddCart')}}" method="post">
+        <input type="hidden" name="product_id" value="{{product.id}}">
+        <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" min="1" max="{{product.stock}}" style="max-width: 3rem" />
+        <br>
+        <button type="submit" class="btn btn-md">Add to Cart</button>
+      </form>
+
+
+    </div>
+  </div>
+
+  <hr>
+  <div class="row">
+    <div class="col-md-12 mt-1" id="s_image">
+      <img src="{{url_for('static', filename='images/' + product.image_1)}}" alt="{{product.name}}" width="130" height="130" class="p-3">
+      <img src="{{url_for('static', filename='images/' + product.image_2)}}" alt="{{product.name}}" width="130" height="130" class="p-3">
+      <img src="{{url_for('static', filename='images/' + product.image_3)}}" alt="{{product.name}}" width="130" height="130" class="p-3">
+    </div>
+  </div>
+
+</div>
+
+
+<script>
+  var b_image = document.getElementById('b_image');
+  var s_image = document.getElementById('s_image').getElementsByTagName('img');
+  for (var i = 0; i < s_image.length; i++) {
+
+    s_image[i].addEventListener('click', full_image);
+  }
+
+  function full_image() {
+    var ImageSRC = this.getAttribute('src');
+    b_image.innerHTML = "<img src=" + ImageSRC + " width='588' height='588'>";
+  }
+
+
+
+</script>
+
+
+
+
+
+<!-- Footer-->
+<footer>
+  <div style="background-color:#FF87B2">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; Jhuv's Shopline 2022</p>
+    </div>
+  </div>
+</footer>
+
+
+{% endblock content %}

@@ -1,0 +1,104 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container px-4 px-lg-5">
+    <a class="navbar-brand" href="/">All Products</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Brands
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {% for brand in brands %}
+            <a class="dropdown-item" href="{{url_for('get_brand', id = brand.id)}}">{{brand.name}}</a>
+            {% endfor %}
+          </div>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Categories
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {% for category in categories %}
+            <a class="dropdown-item" href="{{url_for('get_category', id = category.id)}}">{{category.name}}</a>
+            {% endfor %}
+          </div>
+        </li>
+
+      </ul>
+
+    </div>
+    <form class="d-flex">
+        <button class="btn btn-outline-dark" type="submit">
+          <a class="nav-link" href="{{url_for('getCart')}}" tabindex="-1"> Cart ({{(session["Shoppingcart"])|length}}) </a>
+        </button>
+      </form>
+  </div>
+  </div>
+</nav>
+
+<!-- Header-->
+<header>
+  <div style="background-color:#FF87B2">
+    <div class="container px-4 px-lg-5 my-5">
+      <div class="text-center text-white">
+        <h1 class="display-5 fw-bolder">REGISTER</h1>
+      </div>
+    </div>
+  </div>
+</header>
+
+{% from "_formhelpers.html" import render_field %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-2"></div>
+    </div>
+    <form method="post">
+        {{ form.csrf_token }}
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                {{ render_field(form.name, class="form-control")}}
+                {{ render_field(form.email,class="form-control")}}
+                {{ render_field(form.password, class="form-control")}}
+                {{ render_field(form.confirm ,class="form-control")}}
+            </div>
+            <div class="col-md-4">
+                {{ render_field(form.contact, class="form-control")}}
+                {{ render_field(form.address, class="form-control")}}
+                {{ render_field(form.city, class="form-control")}}
+                {{ render_field(form.state, class="form-control")}}
+                {{ render_field(form.zipcode, class="form-control")}}
+                {{ render_field(form.country,class="form-control")}}
+                {{ form.submit(class="btn btn-sm float-right") }}
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </form>
+</div>
+
+
+
+<!-- Footer-->
+<footer>
+  <div style="background-color:#FF87B2">
+     <div class="container px-4 px-lg-5 my-5">
+      <p class="m-0 text-center text-white">Copyright &copy; Jhuv's Shopline 2022</p>
+    </div>
+  </div>
+</footer>
+
+
+
+{% endblock content %}

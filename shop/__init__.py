@@ -15,7 +15,7 @@ load_dotenv()
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("postgresql://fzmhnututbttwk:c87d197943c36554e0725d13ec338c95414973bf7c53311668fd537b8e809ce4@ec2-34-200-205-45.compute-1.amazonaws.com:5432/d4utgk0dvudgvl", "sqlite:///shopping.db")
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///shopping.db")
 SECRET_KEY = os.urandom(32)
 app.config['SECRET_KEY'] = SECRET_KEY
 

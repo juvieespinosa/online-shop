@@ -1,5 +1,6 @@
-from flask import redirect, render_template, url_for, flash, request, session, current_app
+from flask import redirect, render_template, url_for, flash, request, session, abort, current_app, Response
 from flask_login import login_user, login_required, current_user, logout_user, LoginManager
+from werkzeug.exceptions import Unauthorized
 from shop import db, app, photos, bcrypt, login_manager
 from .forms import CustomerRegisterForm, CustomerLoginFrom
 from .models import Register, CustomerOrder
@@ -20,8 +21,9 @@ def load_user(user_id):
     return User.query.get(user_id)
 
 
-publishable_key = os.getenv("publishable_key")
-stripe.api_key = os.getenv("stripe.api_key")
+
+publishable_key = os.getenv("STRIPE_PUBLISHABLE_KEY")
+stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 
 
 @app.route("/payment", methods=["POST"])
@@ -45,17 +47,15 @@ def payment():
     return redirect(url_for("confirmation"))
 
 
-
-
 @app.route("/confirmation")
 def confirmation():
     return render_template('customer/confirmation.html')
+
 
 @app.route("/customer/register", methods=["GET", "POST"])
 def customer_register():
     form = CustomerRegisterForm()
     if form.validate_on_submit():
-        if form.validate_on_submit():
             hash_password = bcrypt.generate_password_hash(form.password.data)
             register = Register(name=form.name.data, email=form.email.data,  contact=form.contact.data,
                                 password=hash_password, address=form.address.data, city=form.city.data,
@@ -67,7 +67,7 @@ def customer_register():
     return render_template('customer/register.html', form=form)
 
 
-@app.route('/customer/login', methods=['GET','POST'])
+@app.route('/customer/login', methods=["GET", "POST"])
 def customerLogin():
     form = CustomerLoginFrom()
     if form.validate_on_submit():
@@ -97,7 +97,6 @@ def updateshoppingcart():
 
 
 @app.route('/getorder')
-@login_required
 def get_order():
     if current_user.is_authenticated:
         customer_id = current_user.id
@@ -108,16 +107,19 @@ def get_order():
             db.session.add(order)
             db.session.commit()
             session.pop('Shoppingcart')
-            flash('Thank you for your order. We received your order and will begin processing it soon.', 'success')
             return redirect(url_for('orders', invoice=invoice))
         except Exception as e:
             print(e)
-            flash('Something went wrong while processing your order. Please try again.', 'danger')
             return redirect(url_for('getCart'))
+    else:
+        if "email" not in session:
+            flash(f"Please login first", "danger")
+            return redirect(url_for("customerLogin"))
+
+
 
 
 @app.route('/orders/<invoice>')
-@login_required
 def orders(invoice):
     if current_user.is_authenticated:
         price = 0
@@ -136,3 +138,5 @@ def orders(invoice):
     else:
         return redirect(url_for('customerLogin'))
     return render_template('customer/order.html', invoice=invoice, tax=tax, shipping=shipping, subtotal=subtotal, grandtotal=grandtotal, customer=customer, orders=orders)
+
+

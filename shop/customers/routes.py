@@ -22,7 +22,7 @@ def load_user(user_id):
 
 
 
-publishable_key = os.getenv("STRIPE_PUBLISHABLE_KEY")
+publishable_key = os.getenv("PUBLISHABLE_KEY")
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 
 

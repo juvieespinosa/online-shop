@@ -22,6 +22,7 @@ app.config['SECRET_KEY'] = SECRET_KEY
 
 app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir, 'static/images')
 
+
 photos = UploadSet('photos', IMAGES)
 configure_uploads(app, photos)
 

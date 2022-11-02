@@ -9,3 +9,6 @@ Features:
 * Stripe Payment Integration
 
 Technologies Used: Python, Flask, PostgreSQL, SQLite, HTML/CSS, JavaScript, Bootstrap.
+
+
+![image](https://user-images.githubusercontent.com/108498295/199623388-2834f5c2-f4d7-483e-805c-79d87acece40.png)
